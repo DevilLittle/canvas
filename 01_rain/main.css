@@ -1,0 +1,14 @@
+
+body{
+    margin: 0;
+    overflow: hidden;
+}
+.image {
+    display: none;
+    /*display: block;*/
+}
+#canvas {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
