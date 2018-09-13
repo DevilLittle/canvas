@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Histogram</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div class="container">
+    <canvas id="canvas" width="500" height="300"></canvas>
+</div>
+</body>
+<script type="text/javascript">
+
+    let canvas=document.getElementById("canvas");
+    let context=canvas.getContext("2d");
+
+    //定义
+    let define = {
+        width:canvas.width,
+        height:canvas.height,
+        xOffset:20,
+        yOffset:20,
+    };
+
+    //画坐标轴
+    drawAxis(context, define.width, define.height,define.xOffset,define.yOffset);
+
+    context.fillStyle="#2dacfd";
+
+    let xData = ['2011','2012','2013','2014','2015','2016','2017'];
+    let yData = [100,20,40,50,30,80,10];
+    let length = xData.length;
+    console.log(length);
+    let x0=0.1*canvas.width;
+    let y0=0.9*canvas.height;
+
+    //x轴刻度
+    let xLength = define.width-define.xOffset;
+    let xItemLength = xLength/xData.length;
+
+//    let yMax = Math.max(yData);
+//    console.log(yMax);
+
+    //TODO y轴刻度
+    let yLength = define.height-define.yOffset;
+    let yItemLength = yLength/yData.length;
+    //文字的位置
+    let xy0 = {
+        x0:xItemLength/2,
+        y0:yItemLength/2
+    };
+    for (let i = 0; i < 7; i++) {
+        context.fillRect(i * xItemLength+40 , 200-100, 30, 100+10*i);
+        context.fillText(xData[i],x0,y0+20);
+        context.fillText(yData[i],0,x0);
+        x0+=xItemLength;
+//        y0+=yItemLength;
+    }
+
+    /**
+     * drawAxis 画坐标轴函数
+     * @param context 画布上下文
+     * @param totalWidth 画布总宽
+     * @param totalHeight 画布总高
+     * @param xOffset x轴偏移量
+     * @param yOffset y轴偏移量
+     */
+    function drawAxis(context, totalWidth, totalHeight,xOffset,yOffset) {
+
+        let width = totalWidth-define.xOffset;
+        let height = totalHeight-define.yOffset;
+        console.log(width);
+        console.log(height);
+
+        context.beginPath();
+        context.lineWidth = '2';
+        context.strokeStyle = 'black';
+//        context.moveTo(xOffset, height);
+//        context.lineTo(width, height);
+        context.moveTo(0, 300);
+        context.lineTo(500, 300);
+
+//        context.moveTo(xOffset, height);
+//        context.lineTo(xOffset, 0);
+        context.moveTo(0, 300);
+        context.lineTo(0, 0);
+        context.stroke();
+    }
+
+
+</script>
+</html>
