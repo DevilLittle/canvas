@@ -14,50 +14,97 @@
 </body>
 <script type="text/javascript">
 
-    let canvas=document.getElementById("canvas");
-    let context=canvas.getContext("2d");
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+
+    //定义坐标轴线的宽度为1px
+    context.translate(0.5,0.5);  // 当只绘制1像素的线的时候，坐标点需要偏移，这样才能画出1像素实线
+    context.font = "12px Arial";
+    context.lineWidth = 1;
+    context.fillStyle = "#000000";
+    context.strokeStyle = "#000000";
+    //    context.textAlign = 'center';
 
     //定义
     let define = {
-        width:canvas.width,
-        height:canvas.height,
-        xOffset:20,
-        yOffset:20,
+        width: canvas.width,
+        height: canvas.height,
+        paddingLeft: 20,
+        paddingBottom: 20,
+        paddingTop:50,
+        paddingRight:0
     };
 
+    let x0=0;
+    let y0=canvas.height-30;
+
+    let title = '柱状图';
     //画坐标轴
-    drawAxis(context, define.width, define.height,define.xOffset,define.yOffset);
+    drawAxis(context, define.width, define.height, define.paddingLeft, define.paddingBottom,define.paddingTop);
 
-    context.fillStyle="#2dacfd";
+    context.fillStyle = "#2dacfd";
 
-    let xData = ['2011','2012','2013','2014','2015','2016','2017'];
-    let yData = [100,20,40,50,30,80,10];
-    let length = xData.length;
-    console.log(length);
-    let x0=0.1*canvas.width;
-    let y0=0.9*canvas.height;
+    let xData = ['2011', '2012', '2013', '2014', '2015', '2016', '2017'];
+    let seriesData = [100, 20, 40, 50, 30, 80, 10];
+    let series = [100, 20, 40, 50, 30, 80, 10];
 
     //x轴刻度
-    let xLength = define.width-define.xOffset;
-    let xItemLength = xLength/xData.length;
-
-//    let yMax = Math.max(yData);
-//    console.log(yMax);
+    let xLength = define.width - define.paddingLeft;
+    let xItemLength = xLength / xData.length;
+    context.fillText(title,define.width/2,define.paddingTop/2);
 
     //TODO y轴刻度
-    let yLength = define.height-define.yOffset;
-    let yItemLength = yLength/yData.length;
-    //文字的位置
-    let xy0 = {
-        x0:xItemLength/2,
-        y0:yItemLength/2
-    };
-    for (let i = 0; i < 7; i++) {
-        context.fillRect(i * xItemLength+40 , 200-100, 30, 100+10*i);
-        context.fillText(xData[i],x0,y0+20);
-        context.fillText(yData[i],0,x0);
-        x0+=xItemLength;
-//        y0+=yItemLength;
+    let yDataMax = seriesData.sort(function (a, b) {
+        return b - a;
+    })[0];
+    let yDataMin = seriesData.sort(function (a, b) {
+        return a - b;
+    })[0] > 0 ? 0 : seriesData.sort(function (a, b) {
+        return a - b;
+    })[0];
+    let yData = [];
+    let yAllLength = yDataMax-yDataMin;
+    let yLength =10;
+    for(let i = 0; i < yLength; i++){
+        yData.push((yAllLength/yLength)*(yLength-i));
+    }
+    let yItemLength = (define.height-define.paddingBottom-define.paddingTop)/yLength;
+
+    console.log('========');
+    console.log(yItemLength);
+
+
+    for (let i = 0; i < xData.length; i++) {
+
+        //柱状图
+        context.fillRect(i * xItemLength + 40, (define.height-define.paddingBottom)-series[i]/yLength*yItemLength , 30, series[i]/yLength*yItemLength);
+
+
+        //XY刻度
+        //柱状图上方文字
+        context.fillText(series[i], i * xItemLength + 40, (define.height-define.paddingBottom-define.paddingTop)-series[i]/yLength*yItemLength+50);
+        //X轴刻度
+        context.fillText(xData[i], x0, y0 +define.paddingBottom);
+        x0 += xItemLength;
+
+        context.moveTo(x0, y0 +define.paddingBottom-10);
+        context.lineTo(x0, y0 +define.paddingBottom-20);
+        context.stroke();
+        context.closePath();
+    }
+
+    for(let i = 0; i < yLength; i++){
+        //Y轴刻度
+        context.fillText(yData[i], 0, i*yItemLength+define.paddingTop);
+        console.log(yItemLength,i*yItemLength);
+
+
+        y0+=yItemLength;
+
+        context.moveTo(define.paddingLeft, y0);
+        context.lineTo(define.paddingLeft+20, y0);
+        context.stroke();
+        context.closePath();
     }
 
     /**
@@ -65,30 +112,35 @@
      * @param context 画布上下文
      * @param totalWidth 画布总宽
      * @param totalHeight 画布总高
-     * @param xOffset x轴偏移量
-     * @param yOffset y轴偏移量
+     * @param paddingLeft x轴偏移量
+     * @param paddingBottom y轴偏移量
+     * @param paddingTop 画布上方留白距离
      */
-    function drawAxis(context, totalWidth, totalHeight,xOffset,yOffset) {
+    function drawAxis(context, totalWidth, totalHeight, paddingLeft, paddingBottom,paddingTop) {
 
-        let width = totalWidth-define.xOffset;
-        let height = totalHeight-define.yOffset;
-        console.log(width);
-        console.log(height);
+        let width = totalWidth - paddingLeft;
+        let height = totalHeight - paddingBottom;
 
         context.beginPath();
-        context.lineWidth = '2';
-        context.strokeStyle = 'black';
-//        context.moveTo(xOffset, height);
-//        context.lineTo(width, height);
-        context.moveTo(0, 300);
-        context.lineTo(500, 300);
 
-//        context.moveTo(xOffset, height);
-//        context.lineTo(xOffset, 0);
-        context.moveTo(0, 300);
-        context.lineTo(0, 0);
+        context.moveTo(paddingLeft, height);
+        context.lineTo(width, height);
+        context.moveTo(paddingLeft, height);
+        context.lineTo(paddingLeft, paddingTop);
         context.stroke();
+        context.closePath();
     }
+
+
+//    var chart = new sBarChart('canvas',data,{
+//        title: 'xxx公司年度盈利',   // 标题
+//        titleColor: '#000000',      // 标题颜色
+//        titlePosition: 'top',       // 标题位置
+//        bgColor: '#ffffff',         // 背景色
+//        fillColor: '#1E9FFF',       // 柱状填充色
+//        axisColor: '#666666',       // 坐标轴颜色
+//        contentColor: '#a5f0f6'     // 内容横线颜色
+//    });
 
 
 </script>
