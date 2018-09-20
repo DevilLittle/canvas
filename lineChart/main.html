@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Histogram</title>
+    <title>LineChart</title>
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
@@ -35,8 +35,8 @@
             bottom: 20,
         },
         chart: {
-            type: 'bar',
-            barWidth: 30
+            type: 'line',
+            radius: 2
         }
     };
     new Chart('canvas', data, option);

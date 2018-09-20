@@ -47,14 +47,21 @@ class Chart {
         let yItemLength = this.canvasHeight / yLength;
 
 
-        //每个柱状和文字的位置
+        //每个折线圆点和文字的位置
         let xPosition,yPosition;
         for (let i = 0; i < this.data.xData.length; i++) {
 
-            xPosition = xStart + xItemLength / 2-this.option.chart.barWidth/2;
+            xPosition = xStart + xItemLength / 2-this.option.chart.radius/2;
             yPosition = y0 - this.data.series[i] / yLength * yItemLength;
-            // 柱状图
-            this.fillBar(xPosition, yPosition, this.option.chart.barWidth, this.data.series[i] / yLength * yItemLength);
+
+            let nextX = xPosition+xItemLength;
+            let nextY;
+            if(i+1<=this.data.xData.length){
+                nextY = this.height-this.option.grid.bottom-this.data.series[i+1] / yLength * yItemLength;
+            }
+            // 折线图
+            this.fillBar(xPosition, yPosition, this.option.chart.radius);
+            this.drawLine(xPosition,yPosition,nextX,nextY);
 
             // XY刻度
             this.barText(this.data.series[i], xPosition, yPosition -5);
@@ -81,8 +88,6 @@ class Chart {
         context.translate(0.5, 0.5);  // 当只绘制1像素的线的时候，坐标点需要偏移，这样才能画出1像素实线
         context.font = "12px Arial";
         context.lineWidth = 1;
-        context.fillStyle = "#000000";
-        context.strokeStyle = "#000000";
     }
 
     /**
@@ -190,12 +195,22 @@ class Chart {
      * 填充柱状
      * @param x
      * @param y
-     * @param barWidth
-     * @param height
+     * @param radius
      */
-    fillBar(x,y,barWidth,height){
+    fillBar(x,y,radius){
         this.context.fillStyle = "#2dacfd";
-        this.context.fillRect(x, y, barWidth,height);
+        this.context.beginPath();
+        this.context.arc(x,y,radius,0,2*Math.PI);
+        this.context.stroke();
+    }
+
+    drawLine(x,y,nextX,nextY){
+        this.context.fillStyle = "#2dacfd";
+        this.context.beginPath();
+        this.context.moveTo(x,y);
+        this.context.lineTo(nextX, nextY);
+        this.context.stroke();
+        this.context.closePath();
     }
 
     /**
