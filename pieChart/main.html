@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LineChart</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<div class="container">
+    <canvas id="canvas" width="600" height="400"></canvas>
+</div>
+</body>
+<script type="text/javascript" src="./main.js"></script>
+<script type="text/javascript">
+
+    let data = {
+            xData: ['2011', '2012', '2013', '2014', '2015', '2016', '2017'],
+            series: [100, 20, 40, 50, 30, 80, 10]
+        }
+    ;
+
+    let option = {
+        title: {
+            text: '公司年度盈利',   // 标题
+            color: 'red',      // 标题颜色
+            position: 'top',
+        },
+
+        grid: {
+            top: 50,
+            left: 30,
+            right: 0,
+            bottom: 20,
+        },
+        chart: {
+            type: 'line',
+            radius: 2
+        }
+    };
+    new Chart('canvas', data, option);
+
+</script>
+</html>
