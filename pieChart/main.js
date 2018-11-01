@@ -33,15 +33,20 @@ class Chart {
         //初始位置，不会变化
         let y0 = this.height - this.option.grid.bottom;
 
+
+        this.context.beginPath();
+        this.context.arc(100,75,50,0,2*Math.PI);
+        this.context.stroke();
+
         //画坐标轴
-        this.drawAxis(xStart, xEnd, yStart, yEnd);
+        // this.drawAxis(xStart, xEnd, yStart, yEnd);
 
         //x轴刻度
         let xItemLength = this.canvasWidth / this.data.xData.length;
 
 
         //y轴刻度
-        let yScale = this.getYScale(this.data.series);
+        // let yScale = this.getYScale(this.data.series);
         let yLength = 10;
 
         let yItemLength = this.canvasHeight / yLength;
@@ -59,20 +64,22 @@ class Chart {
             if(i+1<=this.data.xData.length){
                 nextY = this.height-this.option.grid.bottom-this.data.series[i+1] / yLength * yItemLength;
             }
+
+
             // 折线图
-            this.fillBar(xPosition, yPosition, this.option.chart.radius);
-            this.drawLine(xPosition,yPosition,nextX,nextY);
+            // this.fillBar(xPosition, yPosition, this.option.chart.radius);
+            // this.drawLine(xPosition,yPosition,nextX,nextY);
 
             // XY刻度
-            this.barText(this.data.series[i], xPosition, yPosition -5);
+            // this.barText(this.data.series[i], xPosition, yPosition -5);
 
             // X轴坐标文字
-            let textStartPosition = y0 + this.option.grid.bottom / 2;
-            this.LabelXAxis(this.data.xData[i], xPosition, textStartPosition);
+            // let textStartPosition = y0 + this.option.grid.bottom / 2;
+            // this.LabelXAxis(this.data.xData[i], xPosition, textStartPosition);
 
             xStart += xItemLength;
 
-            this.ScaleXAxis(xStart, yStart);
+            // this.ScaleXAxis(xStart, yStart);
         }
 
         for (let i = 0; i <= yLength; i++) {

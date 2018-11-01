@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Send Message To Tel</title>
+</head>
+<body>
+<form action="#">
+    <input  id="name" type="text">
+    <input  id="tel" type="text">
+    <a href="#">发送短信</a>
+</form>
+</body>
+<script type="text/javascript">
+
+    function doAction(){
+        var u = navigator.userAgent;
+        var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1;
+        //android终端
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+        var name =document.getElementById('name').value;
+        var tel= document.getElementById('tel').value;
+        if(isiOS){
+            document.getElementsByTagName('a')[0].href="sms://"+tel+"?body="+name;}
+        else{
+            document.getElementsByTagName('a')[0].href="sms://"+tel+"&body="+name;}
+
+    }
+
+</script>
+</html>
